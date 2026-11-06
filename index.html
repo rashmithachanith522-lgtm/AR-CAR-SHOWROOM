@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AR Car Showroom</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.7/three.js/build/ar-threex.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.7/aframe/build/aframe-ar.js"></script>
+  <script src="js/components.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div>
+      <h1>AR CAR SHOWROOM</h1>
+      <p>Point your camera at the Hiro marker.</p>
+    </div>
+    <div id="status" class="status waiting">Marker not found</div>
+  </header>
+
+  <a-scene embedded vr-mode-ui="enabled: false"
+    renderer="logarithmicDepthBuffer: true"
+    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono; matrixCodeType: 3x3;">
+    <a-assets>
+      <a-asset-item id="car-model" src="assets/showroom-car.glb"></a-asset-item>
+    </a-assets>
+
+    <a-marker id="hiro-marker" preset="hiro">
+      <!-- Showroom platform -->
+      <a-box position="0 0.08 0" width="1.45" height="0.12" depth="1.15"
+        color="#202A35"></a-box>
+      <a-ring position="0 0.15 0" rotation="-90 0 0" radius-inner="0.48"
+        radius-outer="0.53" color="#F4B942"></a-ring>
+
+      <!-- 3D car model -->
+      <a-entity id="car" gltf-model="#car-model"
+        position="0 0.20 0" scale="0.42 0.42 0.42"
+        rotation="0 0 0"
+        animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+      </a-entity>
+
+      <!-- Extra primitive objects -->
+      <a-sphere position="-0.52 0.34 -0.34" radius="0.10" color="#E63946"
+        class="tap-target" ball-colour-toggle></a-sphere>
+      <a-box position="0.52 0.30 -0.34" width="0.17" height="0.17" depth="0.17"
+        color="#3A86FF"
+        animation="property: position; from: 0.52 0.25 -0.34; to: 0.52 0.48 -0.34; dir: alternate; loop: true; dur: 1600">
+      </a-box>
+      <a-cylinder position="0.53 0.25 0.38" radius="0.10" height="0.12"
+        color="#F4B942" rotation="90 0 0" class="tap-target" headlight-toggle></a-cylinder>
+      <a-torus position="-0.50 0.35 0.36" radius="0.12" radius-tubular="0.025"
+        color="#06D6A0" rotation="90 0 0"
+        animation="property: rotation; to: 90 360 0; loop: true; dur: 4000; easing: linear">
+      </a-torus>
+
+      <a-light id="showroom-light" type="point" position="0 1.1 0"
+        color="#FFF1C1" intensity="0.8" distance="2.5"></a-light>
+
+      <a-text value="AR CAR SHOWROOM" position="0 0.72 0.48"
+        align="center" color="#FFFFFF" width="2.5" rotation="-90 0 0"></a-text>
+      <a-text value="Tap red sphere: change colour\nTap gold switch: toggle headlights"
+        position="0 0.20 0.58" align="center" color="#FFFFFF"
+        width="1.75" rotation="-90 0 0"></a-text>
+    </a-marker>
+
+    <a-entity camera>
+      <a-cursor raycaster="objects: .tap-target" fuse="false"
+        material="color: white; shader: flat"></a-cursor>
+    </a-entity>
+  </a-scene>
+
+  <footer>AR Car Showroom · Allow camera access to start</footer>
+</body>
+</html>
